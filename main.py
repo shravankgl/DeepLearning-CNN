@@ -3,7 +3,7 @@ from tqdm import tqdm
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR, OneCycleLR, ReduceLROnPlateau
 from utils import *
-from models.resnet import Resnet18
+#from models.resnet import Resnet18
 
 def train(model, device, train_loader, optimizer, epoch, criterion):
     model.train()
@@ -56,12 +56,9 @@ trainloader, testloader = getCifar10DataLoader()
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-# model = ResNet18().to(device)
-# epochs = 40
-# lr = 0.01
-# #optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+#model = ResNet18().to(device)
+epochs = 40
+lr = 0.01
 # optimizer = optim.Adam(model.parameters(), lr=lr)
 # scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=3, verbose=True)
 # criterion = nn.CrossEntropyLoss()
-
-
