@@ -4,6 +4,7 @@ from torchvision import transforms
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from pylab import *
+from torchvision.utils import make_grid, save_image
 
 class Cifar10SearchDataset(torchvision.datasets.CIFAR10):
     def __init__(self, root="~/data/cifar10", train=True, download=True, transform=None):
@@ -55,7 +56,7 @@ def getCifar10DataLoader(batch_size=512, **kwargs):
                                          shuffle=False, num_workers=2)
     return trainloader, testloader
 
-def getWrongPredictions(model, device, val_loader):
+def getWrongPredictions(model, device, val_loader,classes):
     wrong_idx = []
     wrong_samples = []
     wrong_preds = []
@@ -72,7 +73,7 @@ def getWrongPredictions(model, device, val_loader):
         actual_values.append(target.view_as(pred)[wrong_idx])
     return list(zip(torch.cat(wrong_samples),torch.cat(wrong_preds),torch.cat(actual_values)))
 
-def plotWrongPredictions(wrong_predictions):
+def plotWrongPredictions(wrong_predictions,classes):
     fig = plt.figure(figsize=(10,10))
     mean,std = (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
     for i, (sample, wrong_pred, actual_value) in enumerate(wrong_predictions[:20]):
@@ -95,7 +96,7 @@ def imshow(img,c = "" ):
 
 inv_norm = transforms.Normalize((-0.4914/0.2023, -0.4822/0.1994, -0.4465/0.2010), (1/0.2023, 1/0.1994, 1/0.2010))
 
-def plotGradCam(wrong_predictions):
+def plotGradCam(wrong_predictions,cams):
     for i, (sample, wrong_pred, actual_value) in enumerate(wrong_predictions[:20]):
         torch_img = inv_norm(sample)
         normed_torch_img = sample[None]
