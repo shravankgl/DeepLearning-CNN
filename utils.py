@@ -56,6 +56,42 @@ def getCifar10DataLoader(batch_size=512, **kwargs):
                                          shuffle=False, num_workers=2)
     return trainloader, testloader
 
+def getQuickNetDataLoader(batch_size=512, **kwargs):
+    mean, std = (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
+
+    train_transform = A.Compose(
+        [
+            A.Sequential([A.CropAndPad(px=4, keep_size=False), A.RandomCrop(32,32)]),
+            #A.ShiftScaleRotate(shift_limit=0.05, scale_limit=0.05, rotate_limit=5, p=0.5),
+            #A.HorizontalFlip(p=0.3),
+            A.CoarseDropout(max_holes = 4, max_height=8, max_width=8, min_holes = 1,
+                            min_height=8, min_width=8,
+                            fill_value=mean, mask_fill_value = tuple([x * 255.0 for x in mean])),
+            #A.Rotate (limit=5, p=0.5),
+            A.Normalize(mean, std),
+            ToTensorV2(),
+        ]
+    )
+
+    test_transform = A.Compose(
+        [
+            A.Normalize(mean, std),
+            ToTensorV2(),
+        ]
+    )
+    trainset = Cifar10SearchDataset(root='./data', train=True,
+                                        download=True, transform=train_transform)
+
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=128,
+                                          shuffle=True, num_workers=2)
+
+    testset = Cifar10SearchDataset(root='./data', train=False,
+                                       download=True, transform=test_transform)
+
+    testloader =torch.utils.data.DataLoader(testset, batch_size=128,
+                                         shuffle=False, num_workers=2)
+    return trainloader, testloader
+
 def getWrongPredictions(model, device, val_loader,classes):
     wrong_idx = []
     wrong_samples = []
