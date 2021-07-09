@@ -51,7 +51,7 @@ def test(model, device, test_loader):
         100. * correct / len(test_loader.dataset)))
     return test_loss, 100.*correct/len(test_loader.dataset)
 
-trainloader, testloader = getCifar10DataLoader()
+trainloader, testloader = getQuickNetDataLoader() #getCifar10DataLoader()
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
