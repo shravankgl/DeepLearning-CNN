@@ -48,7 +48,7 @@ class LayerBlock(nn.Module):
 
 class QuickNet(nn.Module):
     def __init__(self):
-        super(CIFAR10S11Model, self).__init__()
+        super(QuickNet, self).__init__()
         self.prep_layer = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(3, 3), padding=1,
                       stride=1, bias=False),
