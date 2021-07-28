@@ -32,7 +32,7 @@ def train(model, device, train_loader, optimizer, epoch, criterion):
         100. * correct / len(train_loader.dataset)))
     return train_loss, 100.*correct/len(train_loader.dataset)
 
-def test(model, device, test_loader):
+def validate(model, device, test_loader):
     model.eval()
     test_loss = 0
     correct = 0
